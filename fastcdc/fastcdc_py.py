@@ -34,7 +34,7 @@ def chunk_generator(stream, min_size, avg_size, max_size, fat, hf):
     offset = 0
     while blob:
         if len(blob) <= max_size:
-            blob = memoryview(bytes(blob) + stream.read(read_size))
+            blob = memoryview(bytes(blob) + stream.read(read_size - len(blob)))
         cp = cdc_offset(blob, min_size, avg_size, max_size, cs, mask_s, mask_l)
         raw = bytes(blob[:cp]) if fat else b""
         h = hf(blob[:cp]).hexdigest() if hf else ""
@@ -45,8 +45,8 @@ def chunk_generator(stream, min_size, avg_size, max_size, fat, hf):
 
 def cdc_offset(data, mi, av, ma, cs, mask_s, mask_l):
     pattern = 0
-    i = min(mi, size)
     size = len(data)
+    i = min(mi, size)
     barrier = min(cs, size)
     while i < barrier:
         pattern = (pattern >> 1) + GEAR[data[i]]

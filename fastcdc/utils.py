@@ -96,7 +96,7 @@ def get_memoryview(data):
             return memoryview(mm)
 
     # Handle file object opened in 'rb' mode
-    if hasattr(data, "fileno"):
+    if hasattr(data, "fileno") and not hasattr(data, 'geturl'):
         mm = mmap.mmap(data.fileno(), 0, access=mmap.ACCESS_READ)
         return memoryview(mm)
 

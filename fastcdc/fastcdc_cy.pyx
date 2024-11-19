@@ -58,7 +58,7 @@ cdef uint32_t cdc_offset(
 ):
     cdef uint32_t pattern, i, size, barrier
     pattern = 0
-    i = mi
+    i = min(mi, size)
     size = len(data)
     barrier = min(cs, size)
     while i < barrier:
